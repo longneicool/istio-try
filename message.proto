@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package istiotest;
+
+service RoutMessage {
+    rpc SendMessage(Request) returns (Reply) {}
+}
+
+message Request {
+    string name = 1;
+    string message = 2;
+}
+
+message Reply {
+    uint32 status = 1;
+}
