@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	istiotest "github.com/longneicool/istio-try"
 	"google.golang.org/grpc"
@@ -26,17 +27,23 @@ func main() {
 	ip := flag.String("ip", "127.0.0.1", "The listener ip of the server")
 	port := flag.String("prot", "50001", "the listener port")
 	flag.Parse()
-	fmt.Printf("Listening on %s:%s\n", *ip, *port)
+
+	name := os.Getenv("SERVER_NAME")
+	if len(name) == 0 {
+		name = "NONE"
+	}
 
 	lis, err := net.Listen("tcp", *ip+":"+*port)
 	if err != nil {
-		log.Fatal("listening failed!err:%v", err)
+		log.Fatalf("listening failed!err:%v", err)
 	}
 
 	grpcServer := grpc.NewServer()
 	istiotest.RegisterRoutMessageServer(grpcServer, &server{})
 	err = grpcServer.Serve(lis)
 	if err != nil {
-		log.Fatal("Serve failed!%s", err.Error())
+		log.Fatalf("Serve failed!%s", err.Error())
 	}
+
+	log.Printf("start listening on %s:%s\n in %s", *ip, *port, name)
 }
