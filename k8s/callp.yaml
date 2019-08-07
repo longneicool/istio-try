@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: callp
+  namespace: k8s
+  labels:
+    name: callp
+spec:
+  containers:
+  - name: callp
+    image: dylan_server
+    imagePullPolicy: IfNotPresent
+    ports:
+    - name: grpc-port
+      containerPort: 50001
+      protocol: TCP

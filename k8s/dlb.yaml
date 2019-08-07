@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dlb
+  namespace: k8s
+  labels:
+    name: dlb
+spec:
+  containers:
+  - name: dlb
+    image: dylan_client
+    imagePullPolicy: IfNotPresent

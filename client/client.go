@@ -33,7 +33,7 @@ func main() {
 
 	reply, err := client.SendMessage(ctx, &req)
 	if err != nil {
-		log.Fatal("Rcv error from the server!")
+		log.Fatalf("Rcv error from the server!%s", err.Error())
 	}
 
 	log.Println("Rcv response ", reply.GetStatus())
