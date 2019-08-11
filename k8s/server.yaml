@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+  namespace: k8s
+  labels:
+    name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      name: server
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: dylan_server
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: grpc-port
+          containerPort: 9092
+        - name: htp-port
+          containerPort: 9091
+        env:
+        - name: podIP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: server-svc
+  namespace: k8s
+spec:
+  ports:
+  - name: grpc-port
+    port: 9092
+    targetPort: 9092
+  - name: h2p-port
+    port: 9091
+    targetPort: 9091
+  selector:
+    app: server
+    

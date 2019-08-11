@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"html"
 	"log"
@@ -41,11 +40,6 @@ func (s *server) SendMessage(ctx context.Context, in *istiotest.Request) (*istio
 }
 
 func main() {
-
-	ip := flag.String("ip", "127.0.0.1", "The listener ip of the server")
-	port := flag.String("prot", "9092", "the listener port")
-	flag.Parse()
-
 	go ListeningHttp()
 
 	name := os.Getenv("SERVER_NAME")
@@ -53,7 +47,13 @@ func main() {
 		name = "NONE"
 	}
 
-	lis, err := net.Listen("tcp", *ip+":"+*port)
+        ip := os.Getenv("podIP")
+	if len(ip) == 0 {
+		log.Println("The env podIP is not set, use default one 127.0.0.1")
+		ip = "127.0.0.1"
+	}
+
+	lis, err := net.Listen("tcp", ip + ":" + "9092")
 	if err != nil {
 		log.Fatalf("listening failed!err:%v", err)
 	}
@@ -65,5 +65,5 @@ func main() {
 		log.Fatalf("Serve failed!%s", err.Error())
 	}
 
-	log.Printf("start listening on %s:%s\n in %s", *ip, *port, name)
+	log.Printf("start listening on %s:%s\n in %s", ip, "9092", name)
 }

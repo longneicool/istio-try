@@ -1,0 +1,12 @@
+FROM ubuntu
+COPY server /usr/local/bin
+
+EXPOSE 9091
+EXPOSE 9092
+
+RUN export http_proxy=http://135.245.48.34:8000 && \
+    export https_proxy=http://135.245.48.34:8000 && \
+    apt-get update && apt-get install net-tools && \
+    unset http_proxy && unset https_proxy
+
+CMD ["/usr/local/bin/server"]

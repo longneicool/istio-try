@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: client-deployment
+  namespace: k8s
+  labels:
+    app: client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      name: client
+      labels:
+        app: client
+    spec:
+      containers:
+      - name: client
+        image: dylan_client
+        imagePullPolicy: IfNotPresent

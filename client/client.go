@@ -16,6 +16,7 @@ func main() {
 	name := flag.String("name", "client1", "The name of the client")
 	flag.Parse()
 
+        log.Printf("Start dialing %s", *ip+":"+*port)
 	conn, err := grpc.Dial(*ip+":"+*port, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
@@ -23,7 +24,7 @@ func main() {
 	defer conn.Close()
 
 	client := istiotest.NewRoutMessageClient(conn)
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
 	defer cancel()
 
 	req := istiotest.Request{
